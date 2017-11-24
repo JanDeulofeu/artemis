@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-server.xsd">
+
+    <core xmlns="urn:activemq:core">
+
+        <name>Node_${jgroups.tcp.address}</name>
+
+        <bindings-directory>./data/bindings</bindings-directory>
+
+        <journal-directory>./data/journal</journal-directory>
+
+        <large-messages-directory>./data/largemessages</large-messages-directory>
+
+        <paging-directory>./data/paging</paging-directory>
+
+
+        <!-- GraceFul Server Shutdown -->
+        <graceful-shutdown-enabled>true</graceful-shutdown-enabled>
+        <graceful-shutdown-timeout>5000</graceful-shutdown-timeout>
+
+        <!-- Cluster credentials-->
+        <cluster-user>smo-admin</cluster-user>
+        <cluster-password>smo-admin</cluster-password>
+
+
+        <!-- Connectors -->
+        <connectors>
+            <connector name="netty-connector">tcp://${jgroups.tcp.address}:61616</connector>
+            <connector name="netty-stomp">tcp://${jgroups.tcp.address}:61613</connector>
+            <connector name="netty-stomp-ws">tcp://${jgroups.tcp.address}:61614</connector>
+        </connectors>
+
+
+        <acceptors>
+            <acceptor name="netty-acceptor">tcp://${jgroups.tcp.address}:61616</acceptor>
+            <acceptor name="stomp">tcp://${jgroups.tcp.address}:61613?multicastPrefix=multicast://</acceptor>
+            <acceptor name="stomp-ws">tcp://${jgroups.tcp.address}:61614</acceptor>
+        </acceptors>
+
+
+         <!-- Clustering Configuration Broadcast -->
+        <broadcast-groups>
+            <broadcast-group name="smo-broadcast-group">
+                 <group-address>${udp-address:231.7.7.7}</group-address>
+                 <group-port>9876</group-port>
+                 <broadcast-period>2000</broadcast-period>
+                 <connector-ref>netty-connector</connector-ref>
+            </broadcast-group>
+        </broadcast-groups>
+
+        <discovery-groups>
+            <discovery-group name="smo-artemis-discovery-group">
+               <group-address>${udp-address:231.7.7.7}</group-address>
+               <group-port>9876</group-port>
+               <refresh-timeout>10000</refresh-timeout>
+            </discovery-group>
+        </discovery-groups>
+
+        <cluster-connections>
+           <cluster-connection name="smo-cluster-queues">
+                <connector-ref>netty-connector</connector-ref>
+                <retry-interval>500</retry-interval>
+                <use-duplicate-detection>true</use-duplicate-detection>
+                <message-load-balancing>ON_DEMAND</message-load-balancing>
+                <max-hops>1</max-hops>
+                <discovery-group-ref discovery-group-name="smo-artemis-discovery-group"/>
+           </cluster-connection>
+        </cluster-connections>
+
+
+        <security-settings>
+            <security-setting match="#">
+                <permission type="createNonDurableQueue" roles="smo-admin,guest"/>
+                <permission type="deleteNonDurableQueue" roles="smo-admin,guest"/>
+                <permission type="createDurableQueue" roles="smo-admin,guest"/>
+                <permission type="deleteDurableQueue" roles="smo-admin,guest"/>
+                <permission type="consume" roles="smo-admin,guest"/>
+                <permission type="browse" roles="smo-admin,guest"/>
+                <permission type="send" roles="smo-admin,guest"/>
+                <permission type="manage" roles="smo-admin,guest"/>
+            </security-setting>
+        </security-settings>
+
+
+       <address-settings>
+            <address-setting match="queue.acquisition.server.queue.node">
+                <dead-letter-address>DLQ</dead-letter-address>
+                <max-delivery-attempts>10</max-delivery-attempts>
+                <redistribution-delay>150</redistribution-delay>
+                <redelivery-delay>5000</redelivery-delay>
+                <expiry-address>ExpiryQueue</expiry-address>
+                <last-value-queue>true</last-value-queue>
+                <max-size-bytes>150000</max-size-bytes>
+                <page-size-bytes>100000</page-size-bytes>
+                <send-to-dla-on-no-route>true</send-to-dla-on-no-route>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-delete-queues>true</auto-delete-queues>
+            </address-setting>
+
+            <address-setting match="queue.acquisition.server.queue.rest">
+                <dead-letter-address>DLQ</dead-letter-address>
+                <max-delivery-attempts>10</max-delivery-attempts>
+                <redistribution-delay>150</redistribution-delay>
+                <redelivery-delay>5000</redelivery-delay>
+                <expiry-address>ExpiryQueue</expiry-address>
+                <last-value-queue>true</last-value-queue>
+                <max-size-bytes>150000</max-size-bytes>
+                <page-size-bytes>100000</page-size-bytes>
+                <send-to-dla-on-no-route>true</send-to-dla-on-no-route>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-delete-queues>true</auto-delete-queues>
+            </address-setting>
+
+            <address-setting match="queue.acquisition.server.queue.web">
+                <dead-letter-address>DLQ</dead-letter-address>
+                <max-delivery-attempts>10</max-delivery-attempts>
+                <redistribution-delay>150</redistribution-delay>
+                <redelivery-delay>5000</redelivery-delay>
+                <expiry-address>ExpiryQueue</expiry-address>
+                <last-value-queue>true</last-value-queue>
+                <max-size-bytes>150000</max-size-bytes>
+                <page-size-bytes>100000</page-size-bytes>
+                <send-to-dla-on-no-route>true</send-to-dla-on-no-route>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-delete-queues>true</auto-delete-queues>
+            </address-setting>
+
+
+            <address-setting match="topic.acquisition.server.queue.#">
+                <dead-letter-address>DLQ</dead-letter-address>
+                <max-delivery-attempts>10</max-delivery-attempts>
+                <redistribution-delay>150</redistribution-delay>
+                <redelivery-delay>5000</redelivery-delay>
+                <expiry-address>ExpiryQueue</expiry-address>
+                <last-value-queue>true</last-value-queue>
+                <max-size-bytes>150000</max-size-bytes>
+                <page-size-bytes>100000</page-size-bytes>
+                <send-to-dla-on-no-route>true</send-to-dla-on-no-route>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-delete-queues>true</auto-delete-queues>
+                <auto-create-addresses>true</auto-create-addresses>
+                <default-address-routing-type>MULTICAST</default-address-routing-type>
+            </address-setting>
+        </address-settings>
+
+
+        <addresses>
+            <!-- Queues -->
+            <address name="queue.acquisition.server.queue.node">
+                <anycast/>
+            </address>
+            <address name="queue.acquisition.server.queue.rest">
+                <anycast/>
+            </address>
+            <address name="queue.acquisition.server.queue.web">
+                <anycast/>
+            </address>
+
+            <!-- DeadLetters/Expiry -->
+            <address name="DLQ">
+                <anycast/>
+            </address>
+            <address name="ExpiryQueue">
+                <anycast/>
+            </address>
+        </addresses>
+
+    </core>
+
+</configuration>
