@@ -16,7 +16,7 @@ public class QueueConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(QueueConsumer.class);
 
-    @Value("${artemis.queue.destination}\"")
+    @Value("${artemis.queue.destination}")
     private String destination;
 
     private AtomicInteger atomicInteger = new AtomicInteger();
@@ -25,7 +25,8 @@ public class QueueConsumer {
         return atomicInteger.get();
     }
 
-    @JmsListener(destination = "${artemis.queue.destination}", containerFactory = "jmsListenerContainer" , concurrency = "5-50")
+
+    @JmsListener(destination = "${artemis.queue.destination}", containerFactory = "jmsListenerContainerQueue" , concurrency = "5-50")
     public void consume(final MessageDto message) {
         LOG.debug("Thread [{}] - Message Number [{}] Consumed message [{}] from Destination [{}]", Thread.currentThread().getId(), atomicInteger.incrementAndGet(), message, destination);
     }

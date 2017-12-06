@@ -1,6 +1,6 @@
 package com.amelco.artemis.main;
 
-import com.amelco.artemis.ArtemisConfiguration;
+import com.amelco.artemis.AtsArtemisConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,7 +9,6 @@ public class QueueRunner {
 
     public static void main(final String[] args)
     {
-        SpringApplication.run(ArtemisConfiguration.class, args);
+        SpringApplication.run(AtsArtemisConfiguration.class, args);
     }
-
 }

@@ -1,6 +1,9 @@
 package test.com.amelco.artemis.jms;
 
-import com.amelco.artemis.*;
+import com.amelco.artemis.ArtemisServiceConfiguration;
+import com.amelco.artemis.AtsArtemisConfiguration;
+import com.amelco.artemis.LocalProfileConfiguration;
+import com.amelco.artemis.RemoteProfileConfiguration;
 import com.amelco.artemis.model.MessageDto;
 import com.amelco.artemis.queue.QueueConsumer;
 import com.amelco.artemis.queue.QueueProducer;
@@ -27,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
                                                         , ArtemisEmbeddedServer.class}),
         @ContextConfiguration(name = "child", classes = ArtemisServiceConfiguration.class)
 })
-@DirtiesContext
 @SpringBootTest
 public class QueuesTest {
 
@@ -43,7 +45,7 @@ public class QueuesTest {
         final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         final int numberThreads = 10;
-        final int numberMessages = 5000;
+        final int numberMessages = 500;
 
         for (int x = 0; x < numberThreads; x++) {
             executor.submit(() ->

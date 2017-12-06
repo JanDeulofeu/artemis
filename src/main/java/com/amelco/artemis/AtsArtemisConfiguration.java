@@ -2,9 +2,12 @@ package com.amelco.artemis;
 
 
 import org.apache.activemq.artemis.api.core.DiscoveryGroupConfiguration;
+import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.api.core.UDPBroadcastEndpointFactory;
 import org.apache.activemq.artemis.api.jms.ActiveMQJMSClient;
 import org.apache.activemq.artemis.api.jms.JMSFactoryType;
+import org.apache.activemq.artemis.core.remoting.impl.netty.NettyConnectorFactory;
+import org.apache.activemq.artemis.core.remoting.impl.netty.TransportConstants;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.jms.pool.PooledConnectionFactory;
 import org.slf4j.Logger;
@@ -16,9 +19,11 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.jms.Session;
-
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class AtsArtemisConfiguration {
@@ -43,8 +48,8 @@ public class AtsArtemisConfiguration {
 
 
     public AtsArtemisConfiguration() {
-        this.POOL_SIZE = Runtime.getRuntime().availableProcessors() * 2;
-        this.POOL_MAX_SIZE = this.POOL_SIZE * 4;
+        this.POOL_SIZE = Runtime.getRuntime().availableProcessors();
+        this.POOL_MAX_SIZE = this.POOL_SIZE * 2;
     }
 
     @Bean(name = "threadPoolExecutor", initMethod = "initialize", destroyMethod = "destroy")
@@ -130,7 +135,7 @@ public class AtsArtemisConfiguration {
 
     private ActiveMQConnectionFactory connectionFactory() {
 
-        final ActiveMQConnectionFactory cf = configureUDPConnection();
+        final ActiveMQConnectionFactory cf = configurePublicIP();
 
         cf.setAutoGroup(true);
         cf.setCacheDestinations(true);
@@ -153,6 +158,22 @@ public class AtsArtemisConfiguration {
         return cf;
     }
 
+
+
+    private ActiveMQConnectionFactory configurePublicIP() {
+
+        final Map<String, Object> connectionParams = new HashMap<>();
+
+        connectionParams.put(TransportConstants.HOST_PROP_NAME, brokerUrl);
+        connectionParams.put(TransportConstants.PORT_PROP_NAME, brokerPort);
+
+        final TransportConfiguration transportConfiguration =
+                        new TransportConfiguration(
+                                        NettyConnectorFactory.class.getName(),
+                                        connectionParams);
+
+        return ActiveMQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, transportConfiguration);
+    }
 
     private ActiveMQConnectionFactory configureUDPConnection() {
 
