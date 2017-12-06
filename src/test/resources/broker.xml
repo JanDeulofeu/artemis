@@ -22,7 +22,7 @@ under the License.
 
     <core xmlns="urn:activemq:core">
 
-        <name>Node_${jgroups.tcp.address}</name>
+        <name>Node_localhost</name>
 
         <bindings-directory>./data/bindings</bindings-directory>
 
@@ -44,16 +44,12 @@ under the License.
 
         <!-- Connectors -->
         <connectors>
-            <connector name="netty-connector">tcp://${jgroups.tcp.address}:61616</connector>
-            <connector name="netty-stomp">tcp://${jgroups.tcp.address}:61613</connector>
-            <connector name="netty-stomp-ws">tcp://${jgroups.tcp.address}:61614</connector>
+            <connector name="netty-connector">tcp://localhost:61616</connector>
         </connectors>
 
 
         <acceptors>
-            <acceptor name="netty-acceptor">tcp://${jgroups.tcp.address}:61616</acceptor>
-            <acceptor name="stomp">tcp://${jgroups.tcp.address}:61613?multicastPrefix=multicast://</acceptor>
-            <acceptor name="stomp-ws">tcp://${jgroups.tcp.address}:61614</acceptor>
+            <acceptor name="netty-acceptor">tcp://localhost:61616</acceptor>
         </acceptors>
 
 

@@ -84,5 +84,14 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.0.1.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:3.8.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.activemq:artemis-jms-server:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.activemq:artemis-server:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.activemq:artemis-journal:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.activemq:artemis-native:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.activemq:artemis-jdbc-store:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.16.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.activemq:artemis-service-extensions:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-ejb_3.0_spec:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1" level="project" />
   </component>
 </module>
