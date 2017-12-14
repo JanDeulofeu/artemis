@@ -25,9 +25,9 @@ public class QueueConsumer {
         return atomicInteger.get();
     }
 
-
-    @JmsListener(destination = "${artemis.queue.destination}", containerFactory = "jmsListenerContainerQueue" , concurrency = "5-50")
-    public void consume(final MessageDto message) {
-        LOG.debug("Thread [{}] - Message Number [{}] Consumed message [{}] from Destination [{}]", Thread.currentThread().getId(), atomicInteger.incrementAndGet(), message, destination);
-    }
+//
+//    @JmsListener(destination = "${artemis.queue.destination}", containerFactory = "jmsListenerContainerQueue" , concurrency = "5-50")
+//    public void consume(final MessageDto message) {
+//        LOG.debug("Thread [{}] - Message Number [{}] Consumed message [{}] from Destination [{}]", Thread.currentThread().getId(), atomicInteger.incrementAndGet(), message, destination);
+//    }
 }
