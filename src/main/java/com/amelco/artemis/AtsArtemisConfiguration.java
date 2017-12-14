@@ -19,7 +19,6 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.jms.Session;
 import java.util.HashMap;
@@ -159,7 +158,6 @@ public class AtsArtemisConfiguration {
     }
 
 
-
     private ActiveMQConnectionFactory configurePublicIP() {
 
         final Map<String, Object> connectionParams = new HashMap<>();
@@ -168,9 +166,9 @@ public class AtsArtemisConfiguration {
         connectionParams.put(TransportConstants.PORT_PROP_NAME, brokerPort);
 
         final TransportConfiguration transportConfiguration =
-                        new TransportConfiguration(
-                                        NettyConnectorFactory.class.getName(),
-                                        connectionParams);
+                new TransportConfiguration(
+                        NettyConnectorFactory.class.getName(),
+                        connectionParams);
 
         return ActiveMQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, transportConfiguration);
     }
@@ -183,6 +181,8 @@ public class AtsArtemisConfiguration {
 
         final DiscoveryGroupConfiguration discoveryGroupConfiguration = new DiscoveryGroupConfiguration();
         discoveryGroupConfiguration.setBroadcastEndpointFactory(udpBroadcastEndpointFactory);
+        discoveryGroupConfiguration.setDiscoveryInitialWaitTimeout(5000);
+        discoveryGroupConfiguration.setRefreshTimeout(2000);
 
         return ActiveMQJMSClient.createConnectionFactoryWithoutHA(discoveryGroupConfiguration, JMSFactoryType.CF);
     }
