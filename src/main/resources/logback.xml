@@ -9,7 +9,7 @@
 
     <logger name="org.apache" level="ERROR"/>
     <logger name="org.springframework" level="ERROR"/>
-    <logger name="com.amelco.artemis.queue" level="DEBUG" additivity="true"/>
+    <logger name="com.amelco.artemis.jms" level="DEBUG" additivity="true"/>
 
 
     <root level="DEBUG">
